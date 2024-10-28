@@ -1,0 +1,23 @@
+{
+  "project": "exapmle",
+  "stage": "",
+  "provider": {
+    "architectures": "",
+    "runtime": "nodejs18.x"
+  },
+  "awsConfig": {
+    "region": "REGION",
+    "credentials": {
+      "accessKeyId": "your_access_Key_id",
+      "secretAccessKey": "your_secret_access_key"
+    }
+  },
+  "functionPath": "./src",
+  "function": [
+    {
+      "name": "test",
+      "handler": "index.handler",
+      "source": "index.js"
+    }
+  ]
+}

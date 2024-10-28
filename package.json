@@ -1,0 +1,28 @@
+{
+  "name": "serverless-nodejs",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "bin": {
+    "sls": "dist/index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "build": "tsc",
+    "test": " tsc & npm i -g ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.680.0",
+    "aws-sdk": "^2.1691.0",
+    "fs": "^0.0.1-security",
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.1",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.3"
+  }
+}
