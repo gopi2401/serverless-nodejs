@@ -5,7 +5,8 @@ import * as path from 'path';
 import { fileCreate } from './src/services/sampleFile';
 import { deploy } from './src/main';
 const resolvedPath = path.resolve('./servdata.json');
-const servdata = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+export const servdata = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+console.log(servdata)
 if (!servdata['awsConfig']) throw 'awsConfig not defind';
 if (!servdata['function']) throw 'function not defind';
 
@@ -16,7 +17,11 @@ if (!servdata['function']) throw 'function not defind';
         const loading = startDotsLoading(loadingMessage);
         if (fs.existsSync(resolvedPath)) {
             stopDotsLoading(loading, "Start build and deploy!.");
-            deploy()
+            const args = process.argv.splice(2);
+            const arg = args[0];
+            if (arg === 'deploy') {
+                deploy();
+            } else if (arg === 'remove') { }
         } else {
             console.error("JSON file not found!.");
             // process.exit(1);
@@ -26,8 +31,8 @@ if (!servdata['function']) throw 'function not defind';
             // }, 3000);
         }
 
-        const args = process.argv.splice(2);
-        const arg = args[0];
+        // const args = process.argv.splice(2);
+        // const arg = args[0];
 
         // if (args.length > 1) {
         //     console.info("You can only pass one argument; `build` or `deploy`");
@@ -35,12 +40,12 @@ if (!servdata['function']) throw 'function not defind';
         // if (!arg) {
         //     console.info("You need to pass one of the following arguments: `build` or `deploy`.");
         // }
-        if (arg === 'build') {
-            // deploy()
+        // if (arg === 'build') {
+        // deploy()
 
-        } else {
-            // console.log(`Sorry, ${arg} is not a valid argument.`);
-        }
+        // } else {
+        // console.log(`Sorry, ${arg} is not a valid argument.`);
+        // }
 
 
     } catch (e) {
@@ -64,5 +69,3 @@ function stopDotsLoading(loadingInterval, message) {
     clearInterval(loadingInterval);
     process.stdout.write(`\r${message}\n`);
 }
-
-export { resolvedPath, servdata }

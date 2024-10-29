@@ -3,18 +3,20 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "bin": {
-    "sls": "dist/index.js"
+    "sl-nodejs": "dist/index.js"
   },
   "scripts": {
     "start": "node index.js",
     "build": "tsc",
-    "test": " tsc & npm i -g ."
+    "test": " tsc & npm i -g .",
+    "test:deploy": " tsc & npm i -g . & cd example & sl-nodejs deploy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-iam": "^3.679.0",
     "@aws-sdk/client-lambda": "^3.680.0",
     "aws-sdk": "^2.1691.0",
     "fs": "^0.0.1-security",

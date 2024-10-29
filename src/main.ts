@@ -3,6 +3,9 @@ import * as fs from 'fs';
 import { createFunction } from './services/lambda/createFunction';
 import { servdata } from '..';
 import { build_mjs } from './services/build_file';
+import { createPolicy } from './services/iam/createPolicy';
+import { createRole } from './services/iam/createRole';
+import { attachRolePolicy } from './services/iam/attachRolePolicy';
 
 
 
@@ -78,25 +81,57 @@ import { build_mjs } from './services/build_file';
 
 //     return client.send(command);
 // };
-const deploy = async () => {
-    // data['functionPath']
-    for (let value of servdata['function']) {
-        let filePath = `${servdata.functionPath && servdata.functionPath.trim() != "" ? servdata.functionPath.trim() + "/" + value.source : value.source}`
-        let zibFile = await build_mjs(filePath);
-        const code = fs.readFileSync(zibFile);
+export const deploy = async () => {
+    try {
+        let roleArn = await createRole(servdata.project);
+        let policy = await createPolicy({ PolicyName: `${servdata.project}-policy` });
+        // let roleArn = attachRolePolicy()
+        // for (let value of servdata['function']) {
+        //     let filePath = `${servdata.functionPath && servdata.functionPath.trim() != "" ? servdata.functionPath.trim() + "/" + value.source : value.source}`
+        //     let zibFile = await build_mjs(filePath);
+        //     const code = fs.readFileSync(zibFile);
 
-        const input = {
-            Code: { ZipFile: code },
-            FunctionName: value.name,
-            // Role: roleArn,
-            Architectures: servdata.provider.architectures ? [servdata.provider.architectures] : ["arm64"],
-            Handler: value.handler,  // Required when sending a .zip file
-            PackageType: "Zip", // Required when sending a .zip file
-            Runtime: servdata.provider.runtime, // Required when sending a .zip file
-        }
-        let da = await createFunction(input)
-        console.log(da);
+        //     const input = {
+        //         Code: { ZipFile: code },
+        //         FunctionName: value.name,
+        //         // Role: roleArn,
+        //         Architectures: servdata.provider.architectures ? [servdata.provider.architectures] : ["arm64"],
+        //         Handler: value.handler,  // Required when sending a .zip file
+        //         PackageType: "Zip", // Required when sending a .zip file
+        //         Runtime: servdata.provider.runtime, // Required when sending a .zip file
+        //     }
+        //     let da = await createFunction(input)
+        //     console.log(da);
+        // } 
+    } catch (e) {
+        throw e
     }
-}
 
-export { deploy }
+};
+export const remove = async () => {
+    try {
+        let roleArn = await createRole(servdata.project);
+        let policy = await createPolicy({ PolicyName: `${servdata.project}-policy` });
+        // let roleArn = attachRolePolicy()
+        // for (let value of servdata['function']) {
+        //     let filePath = `${servdata.functionPath && servdata.functionPath.trim() != "" ? servdata.functionPath.trim() + "/" + value.source : value.source}`
+        //     let zibFile = await build_mjs(filePath);
+        //     const code = fs.readFileSync(zibFile);
+
+        //     const input = {
+        //         Code: { ZipFile: code },
+        //         FunctionName: value.name,
+        //         // Role: roleArn,
+        //         Architectures: servdata.provider.architectures ? [servdata.provider.architectures] : ["arm64"],
+        //         Handler: value.handler,  // Required when sending a .zip file
+        //         PackageType: "Zip", // Required when sending a .zip file
+        //         Runtime: servdata.provider.runtime, // Required when sending a .zip file
+        //     }
+        //     let da = await createFunction(input)
+        //     console.log(da);
+        // } 
+    } catch (e) {
+        throw e
+    }
+
+};
