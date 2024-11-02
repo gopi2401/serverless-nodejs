@@ -2,11 +2,10 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { fileCreate } from './src/services/sampleFile';
-import { deploy } from './src/main';
+import { deploy } from './src/main.js';
+import { core_file_create } from './src/services/coredata/core_file.js';
 const resolvedPath = path.resolve('./servdata.json');
 export const servdata = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
-console.log(servdata)
 if (!servdata['awsConfig']) throw 'awsConfig not defind';
 if (!servdata['function']) throw 'function not defind';
 
@@ -20,13 +19,14 @@ if (!servdata['function']) throw 'function not defind';
             const args = process.argv.splice(2);
             const arg = args[0];
             if (arg === 'deploy') {
+                await core_file_create()
                 deploy();
             } else if (arg === 'remove') { }
         } else {
             console.error("JSON file not found!.");
             // process.exit(1);
             // setTimeout(() => {
-            fileCreate()
+            core_file_create()
             stopDotsLoading(loading, "Sample json file created!.")
             // }, 3000);
         }
@@ -55,7 +55,7 @@ if (!servdata['function']) throw 'function not defind';
 
 
 
-function startDotsLoading(message) {
+function startDotsLoading(message: string) {
     const dots = ['.', '..', '...', ''];
     let dotIndex = 0;
 
@@ -65,7 +65,7 @@ function startDotsLoading(message) {
     }, 500); // Update every 500 ms
 }
 
-function stopDotsLoading(loadingInterval, message) {
+function stopDotsLoading(loadingInterval: any, message: string) {
     clearInterval(loadingInterval);
     process.stdout.write(`\r${message}\n`);
 }

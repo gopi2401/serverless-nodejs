@@ -1,10 +1,13 @@
 import { CreateFunctionCommand } from "@aws-sdk/client-lambda";
-import { lambda_client } from "./lambda.Client.Config";
+import { lambda_client } from "./lambda.Client.Config.js";
 
 
-const createFunction = async (input) => {
-    const command = new CreateFunctionCommand(input);
-    return await lambda_client.send(command);
+export const createFunction = async (input: any) => {
+    try {
+        const command = new CreateFunctionCommand(input);
+        const response = await lambda_client.send(command);
+        return response;
+    } catch (e: any) {
+        console.error(e.message);
+    }
 };
-
-export { createFunction };
