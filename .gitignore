@@ -1,2 +1,9 @@
 node_modules
 dist
+
+## this repo to unnecessary file
+
+# functions zip files
+pkg  
+# log file
+sls
