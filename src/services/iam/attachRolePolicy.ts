@@ -7,8 +7,9 @@ export const attachRolePolicy = async (policyArn: string, roleName: string) => {
             PolicyArn: policyArn,
             RoleName: roleName,
         });
-
-        return await iamClient.send(command);
+        const response = await iamClient.send(command);
+        // console.debug("attachRolePolicy", response);
+        return response;
     } catch (e) {
         console.error(e);
     }

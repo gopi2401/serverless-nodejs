@@ -1,27 +1,27 @@
 import * as fs from 'fs';
 import { JSONFilePreset } from 'lowdb/node';
-import { LogData } from './types.js';
+import { LogData, roleType } from './types.js';
 import { core_data } from './core_file.js';
+import { getAWSAccountId } from '../id/get_aws_account_Id.js';
 
-const defaultData: LogData = {
-    ...core_data,
+const template = {
+    awsid: await getAWSAccountId(),
+    function: [],
+    functionPath: '',
+    policy: [],
     role: {},
-    policy: []
 };
+const defaultData: LogData = template;
 
 if (!fs.existsSync('./sls')) {
     fs.mkdirSync('sls');
 };
 
-const logdata = await JSONFilePreset('sls/log.json', defaultData);
+export const logdata = await JSONFilePreset('sls/log.json', defaultData);
 
 export let log_data = logdata.data;
 
-export const log_create = async () => {
-    await logdata.write()
-}
-
-export const role_log_create = async (roledata: object) => {
+export const role_log_create = async (roledata: any) => {
     logdata.data.role = roledata;
     await logdata.write()
 }

@@ -1,8 +1,8 @@
 {
-  "project": "exapmle",
+  "project": "example",
   "stage": "",
   "provider": {
-    "architectures": "",
+    "architectures": "arm64",
     "runtime": "nodejs18.x"
   },
   "awsConfig": {

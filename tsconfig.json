@@ -19,5 +19,9 @@
       "outDir": "./dist",
       "sourceMap": true,
       "lib": ["es2022"],
-    }
+    },
+    "exclude": [
+      "example",
+      "node_modules"
+    ]
   }

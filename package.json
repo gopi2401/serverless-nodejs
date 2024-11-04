@@ -11,7 +11,8 @@
     "start": "node index.js",
     "build": "tsc",
     "test": " tsc & npm i -g .",
-    "test:deploy": " tsc & npm i -g . & cd example & sl-nodejs deploy"
+    "test:deploy": " tsc & npm i -g . & cd example & sl-nodejs deploy",
+    "test:remove": " tsc & npm i -g . & cd example & sl-nodejs remove"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +24,8 @@
     "aws-sdk": "^2.1691.0",
     "fs": "^0.0.1-security",
     "jszip": "^3.10.1",
-    "lowdb": "^7.0.1"
+    "lowdb": "^7.0.1",
+    "ora": "^8.1.1"
   },
   "devDependencies": {
     "@sindresorhus/tsconfig": "^6.0.0",

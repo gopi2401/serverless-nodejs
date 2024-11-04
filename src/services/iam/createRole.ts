@@ -1,12 +1,15 @@
 import { CreateRoleCommand } from "@aws-sdk/client-iam";
 import { iamClient } from "./iam.Client.Config.js";
 import { getRole } from "./getRole.js";
-import { log_data, log_role_create } from "../coredata/log_data.js";
+import { log_data, role_log_create } from "../coredata/log_data.js";
 import { isNotEmpty } from "../utils.js";
+import ora from "ora";
 
 export const createRole = async (roleName: string) => {
+    const dep = ora('Create role!').start();
     try {
         if (isNotEmpty(log_data.role)) {
+            dep.stop().succeed('role created');
             return log_data.role;
         } else {
             const command = new CreateRoleCommand({
@@ -25,21 +28,23 @@ export const createRole = async (roleName: string) => {
                 RoleName: roleName,
             });
             let response = await iamClient.send(command);
+            // console.debug('createRole', response);
             if (response.$metadata.httpStatusCode == 200) {
-                await log_role_create(response.Role!)
-                console.log(response);
+                await role_log_create(response.Role!)
+                dep.stop().succeed('role created');
             } else {
-                console.warn(response);
+                console.error(response);
             }
-            return response;
+            return response.Role;
         }
-    } catch (e) {
-        console.error(e);
+    } catch (e: any) {
+        console.error(e.message);
+        dep.stop().fail(e.message);
         let response: any = await getRole(roleName);
-        console.log(response);
+        // console.debug("getRole", response);
         if (response?.$metadata?.httpStatusCode == 200) {
-            await log_role_create(response.Role!)
-            return response?.Role?.Arn;
+            await role_log_create(response.Role!)
+            return response?.Role;
         }
     }
 };

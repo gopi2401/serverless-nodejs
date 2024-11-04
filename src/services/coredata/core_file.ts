@@ -2,7 +2,7 @@ import { JSONFilePreset } from 'lowdb/node';
 import { Data } from './types.js';
 
 const template = {
-  project: "exapmle",
+  project: "example",
   stage: "",
   provider: {
     architectures: "arm64",
