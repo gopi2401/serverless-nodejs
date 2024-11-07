@@ -13,26 +13,6 @@ export const createFunction = async (input: any) => {
         if (index != -1) { } else {
             const command = new CreateFunctionCommand(input);
             const response = await lambda_client.send(command);
-            const inputdata = {
-                FunctionName: response.FunctionName,
-                AuthType: FunctionUrlAuthType.NONE
-            };
-            const data = {
-                FunctionName: response.FunctionName, // required
-                StatementId: "FunctionURLAllowPublicAccess" + `-${response.FunctionName}`, // required
-                Action: "lambda:InvokeFunctionUrl", // required
-                Principal: "*", // required
-                SourceArn: `arn:aws:lambda:ap-south-1:908027393427:function:*`,
-                // SourceAccount: "STRING_VALUE",
-                // EventSourceToken: "STRING_VALUE",
-                // Qualifier: "STRING_VALUE",
-                // RevisionId: "STRING_VALUE",
-                // PrincipalOrgID: "STRING_VALUE",
-                FunctionUrlAuthType: FunctionUrlAuthType.NONE
-            };
-            await addPermission(data);
-            let functions = await create_function_url_config(inputdata);
-            // console.debug('create_function_url_config', functions);
             if (response.$metadata.httpStatusCode == 201) {
                 const {
                     CodeSize,
@@ -45,21 +25,33 @@ export const createFunction = async (input: any) => {
                     PackageType,
                     Role,
                 } = response;
-                // const { } = functions;
                 logdata.data.function.push({
                     CodeSize,
                     Description,
                     FunctionArn,
                     FunctionName,
-                    FunctionUrl: functions?.FunctionUrl,
+                    FunctionUrl: null,
                     Handler,
                     LastModified,
                     MemorySize,
                     PackageType,
                     Role,
+                    Permission: []
                 });
                 logdata.write();
             }
+            await addPermission({
+                FunctionName: response.FunctionName, // required
+                StatementId: "FunctionURLAllowPublicAccess" + response.FunctionName, // required
+                Action: "lambda:InvokeFunctionUrl", // required
+                Principal: "*", // required
+                FunctionUrlAuthType: "NONE"
+            });
+            const urlConfig = {
+                FunctionName: response.FunctionName,
+                AuthType: FunctionUrlAuthType.NONE
+            };
+            await create_function_url_config(urlConfig);
             return response;
         }
     } catch (e: any) {

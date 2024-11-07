@@ -34,3 +34,6 @@ export const function_log_create = async (function_data: object) => {
     logdata.data.function.push(function_data);
     await logdata.write()
 }
+
+export const find_function_index = (FunctionName: string) => log_data.function.findIndex((value) => (
+    value.FunctionName === FunctionName));

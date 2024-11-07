@@ -13,6 +13,7 @@ import { detach_role_policy } from './services/iam/detach_role_policy.js';
 import { isEmpty, isNotEmpty } from './services/utils.js';
 import { policy_data } from './services/coredata/policy_data.js';
 import ora from 'ora';
+import { remove_permission } from './services/lambda/remove-permission.js';
 
 export const deploy = async () => {
     const dep = ora('Start build and deploy!').start();
@@ -59,11 +60,8 @@ export const remove = async () => {
             rem.stop().warn('Does not exist any function!');
         } else {
             log_data.function.map(async (fun) => {
-                const response = await delete_function(fun.FunctionName);
-                if (response?.$metadata.httpStatusCode === 204) {
-                    logdata.data.function = logdata.data.function.filter((value) => (value.FunctionName != fun.FunctionName));
-                    logdata.write();
-                };
+                await remove_permission(fun.FunctionName);
+                await delete_function(fun.FunctionName);
             })
             for (let i = 0; i < log_data.policy.length; ++i) {
                 if (isNotEmpty(log_data.role)) {

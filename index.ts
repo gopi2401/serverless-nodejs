@@ -3,7 +3,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { deploy, remove } from './src/main.js';
-import { core_data, core_file_create } from './src/services/coredata/core_file.js';
+import { core_data } from './src/services/coredata/core_file.js';
 import ora from 'ora';
 const resolvedPath = path.resolve('./servdata.json');
 
@@ -19,7 +19,6 @@ if (!core_data.function) throw 'function not defind';
             const args = process.argv.splice(2);
             const arg = args[0];
             if (arg === 'deploy') {
-                await core_file_create()
                 let data = await deploy();
                 if (data)
                     data.map((value) => {
@@ -30,7 +29,6 @@ if (!core_data.function) throw 'function not defind';
             }
         } else {
             spinner.stop().fail("JSON file not found!.");
-            core_file_create();
             // stopDotsLoading(loading, "Sample json file created!.")
         }
     } catch (e) {
