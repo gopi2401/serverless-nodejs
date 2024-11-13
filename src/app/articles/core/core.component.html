@@ -1,0 +1,185 @@
+<div class="min-w-0 max-w-2xl flex-auto px-4 py-16 lg:max-w-none lg:pl-8 lg:pr-0 xl:px-16">
+    <article>
+        <div class="">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Serverless Node.js with AWS Lambda Documentation</h1>
+
+            <!-- Introduction -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Introduction</h2>
+                <p class="text-gray-600 mb-4">
+                    Serverless Node.js with AWS Lambda offers a scalable, efficient way to build applications without
+                    server
+                    management. AWS Lambda
+                    handles infrastructure and automatically scales with demand, making it ideal for lightweight,
+                    event-driven functions.
+                </p>
+            </section>
+
+            <!-- Configuration and Setup -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Configuration and Setup</h2>
+                <p class="text-gray-600">
+                    Configure your Serverless project in <code
+                        class="bg-gray-100 p-1 rounded text-sm">serverless.yml</code>.
+                    This file defines
+                    resources, triggers, and permissions.
+                </p>
+                <div class="mt-4">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Environment Variables</h3>
+                    <pre class="bg-gray-100 p-4 rounded text-gray-800 mb-4">
+<code>
+provider:
+  name: aws
+  runtime: nodejs14.x
+  environment:
+    <!-- DB_TABLE: ${self:service}-table -->
+</code>
+                </pre>
+                </div>
+                <div class="mt-4">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">IAM Roles and Permissions</h3>
+                    <p class="text-gray-600 mb-2">Define IAM roles to control AWS service access for your Lambda
+                        functions.
+                    </p>
+                    <pre class="bg-gray-100 p-4 rounded text-gray-800">
+<code>
+provider:
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+      <!-- Resource: "arn:aws:dynamodb:us-east-1:*:table/${self:provider.environment.DB_TABLE}" -->
+</code>
+                </pre>
+                </div>
+            </section>
+
+            <!-- Working with AWS Services -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Working with AWS Services</h2>
+                <p class="text-gray-600">
+                    Integrate AWS services like S3, API Gateway, and DynamoDB to create event-driven workflows. For
+                    example:
+                </p>
+                <pre class="bg-gray-100 p-4 rounded text-gray-800 mt-4">
+<code>
+functions:
+  processUpload:
+    handler: handler.process
+    events:
+      - s3:
+          bucket: my-upload-bucket
+          event: s3:ObjectCreated:*
+</code>
+            </pre>
+            </section>
+
+            <!-- Monitoring and Logging -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Monitoring and Logging</h2>
+                <p class="text-gray-600">
+                    Use AWS CloudWatch to monitor and log your Lambda function activity.
+                </p>
+                <ul class="list-disc list-inside mt-4 space-y-2 text-gray-600">
+                    <li>Access logs with <code
+                            class="bg-gray-100 p-1 rounded text-sm">serverless logs -f functionName</code>.
+                    </li>
+                    <li>Set CloudWatch alarms to track metrics like invocation count and error rate.</li>
+                    <li>Enable AWS X-Ray for distributed tracing.</li>
+                </ul>
+            </section>
+
+            <!-- Error Handling and Retries -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Error Handling and Retries</h2>
+                <p class="text-gray-600">
+                    AWS Lambda provides automatic retries and Dead Letter Queues (DLQ) for error handling.
+                </p>
+                <pre class="bg-gray-100 p-4 rounded text-gray-800 mt-4">
+<code>
+functions:
+  myFunction:
+    handler: handler.run
+    events:
+      - s3:
+          bucket: my-upload-bucket
+          event: s3:ObjectCreated:*
+    deadLetterQueue:
+      targetArn: arn:aws:sqs:us-east-1:123456789012:my-dlq
+      type: SQS
+</code>
+            </pre>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Best Practices</h2>
+                <ul class="list-disc list-inside mt-4 space-y-2 text-gray-600">
+                    <li>Minimize function size to reduce cold starts.</li>
+                    <li>Use efficient, asynchronous code and optimize database queries.</li>
+                    <li>Set appropriate memory and timeout values to balance performance and cost.</li>
+                    <li>Utilize Lambda Layers to share dependencies across functions.</li>
+                </ul>
+            </section>
+
+            <!-- Security Best Practices -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Security Best Practices</h2>
+                <ul class="list-disc list-inside mt-4 space-y-2 text-gray-600">
+                    <li>Assign least privilege IAM roles to Lambda functions.</li>
+                    <li>Encrypt environment variables for secure data handling.</li>
+                    <li>Validate all inputs to prevent injection attacks.</li>
+                    <li>Use VPCs to restrict network access.</li>
+                </ul>
+            </section>
+
+            <!-- Troubleshooting Common Issues -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Troubleshooting Common Issues</h2>
+                <p class="text-gray-600 mb-4">
+                    Here are solutions to some common serverless issues:
+                </p>
+                <ul class="list-disc list-inside mt-4 space-y-2 text-gray-600">
+                    <li><strong>Lambda Timeout:</strong> Ensure adequate timeout settings.</li>
+                    <li><strong>Cold Start Latency:</strong> Use small packages and keep functions warm with scheduled
+                        events.</li>
+                    <li><strong>Permission Errors:</strong> Verify IAM roles in <code
+                            class="bg-gray-100 p-1 rounded text-sm">serverless.yml</code>.</li>
+                    <li><strong>Environment Variables:</strong> Use <code
+                            class="bg-gray-100 p-1 rounded text-sm">serverless print</code> to verify values.</li>
+                </ul>
+            </section>
+
+            <!-- Advanced Topics -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Advanced Topics</h2>
+                <ul class="list-disc list-inside mt-4 space-y-2 text-gray-600">
+                    <li><strong>Lambda Layers:</strong> Share code across functions for optimized deployments.</li>
+                    <li><strong>Custom Authorizers:</strong> Implement authentication/authorization with API Gateway.
+                    </li>
+                    <li><strong>Scheduled Events:</strong> Use CloudWatch for scheduled tasks (cron jobs).</li>
+                    <li><strong>Provisioned Concurrency:</strong> Pre-warm functions for consistent latency.</li>
+                </ul>
+            </section>
+
+            <!-- Deploying and Managing Versions -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-4">Deploying and Managing Versions</h2>
+                <p class="text-gray-600">
+                    Lambda supports versioning and aliases to manage deployments.
+                </p>
+                <pre class="bg-gray-100 p-4 rounded text-gray-800 mt-4">
+<code>
+provider:
+  versionFunctions: true
+</code>
+            </pre>
+                <p class="text-gray-600 mt-4">
+                    Use aliases for version control across environments like development, staging, and production.
+                </p>
+            </section>
+
+        </div>
+
+    </article>
+</div>

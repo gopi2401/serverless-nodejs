@@ -8,7 +8,7 @@ import { OnThisPageComponent } from "./onthispage/onthispage.component";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SideBarComponent, FooterComponent, articlesComponent, OnThisPageComponent],
+  imports: [RouterOutlet, SideBarComponent, articlesComponent, FooterComponent, OnThisPageComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
