@@ -2,6 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
+    paths-ignore:
+      - "README.md"
     branches:
       - docs
 
@@ -18,6 +20,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
 
       - name: Install angular cli
         run: npm install -g @angular/cli
@@ -26,4 +30,4 @@ jobs:
         run: npm install
 
       - name: Build project and deploy
-        run: ng deploy --base-href=/serverless-nodejs/
+        run: ng deploy
