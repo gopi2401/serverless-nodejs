@@ -3,28 +3,30 @@ import { JSONFilePreset } from 'lowdb/node';
 import { core_data } from './core_file.js';
 import { log_data } from './log_data.js';
 import { policyTypes } from './types.js';
-let log_policy_statement: any = {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "logs:CreateLogGroup",
-            "Resource": `arn:aws:logs:${core_data.awsConfig.region + ":" + log_data.awsid}:*`
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            Resource: []
-        }
-    ]
-};
-const resource = core_data.function.map((value) => (
-    `arn:aws:logs:${core_data.awsConfig.region + ":" + log_data.awsid}:log-group:/aws/lambda/${value.name}:*`
-));
-log_policy_statement.Statement[1].Resource = resource;
+let log_policy_statement: any = () => {
+    return {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": "logs:CreateLogGroup",
+                "Resource": `arn:aws:logs:${core_data.awsConfig.region + ":" + log_data.awsid}:*`
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ],
+                Resource: []
+            }
+        ]
+    };
+}
+// const resource = core_data.function.map((value: any) => (
+//     `arn:aws:logs:${core_data.awsConfig.region + ":" + log_data.awsid}:log-group:/aws/lambda/${value.name}:*`
+// ));
+// log_policy_statement.Statement[1].Resource = resource;
 let url_policy_statement = {
     "Version": "2012-10-17",
     "Statement": [

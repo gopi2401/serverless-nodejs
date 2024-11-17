@@ -5,7 +5,7 @@ import { log_data, policy_log_create, } from "../coredata/log_data.js";
 
 export const createPolicy = async (params: { PolicyName: string, policy_statement: any }) => {
     try {
-        let item = log_data.policy.find(item => (item.PolicyName === params.PolicyName));
+        let item = log_data.policy.find((item: any) => (item.PolicyName === params.PolicyName));
         if (item) {
             // return item;
         } else {

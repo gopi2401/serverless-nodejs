@@ -7,7 +7,7 @@ import { addPermission } from './add_permission.js';
 
 export const createFunction = async (input: any) => {
     try {
-        let index = log_data.function.findIndex((value) => (
+        let index = log_data.function.findIndex((value: any) => (
             value.FunctionName === input.FunctionName
         ));
         if (index != -1) { } else {

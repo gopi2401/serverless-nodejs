@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import path from 'path';
 import { build_mjs } from './services/build_file.js';
 import { core_data } from './services/coredata/core_file.js';
 import { createPolicy } from './services/iam/createPolicy.js';
@@ -14,6 +15,50 @@ import { isEmpty, isNotEmpty } from './services/utils.js';
 import { policy_data } from './services/coredata/policy_data.js';
 import ora from 'ora';
 import { remove_permission } from './services/lambda/remove-permission.js';
+import { exec } from 'child_process';
+
+export const create = async (projectName: string, projectPath: any) => {
+    const rem = ora('creating project').start();
+    try {
+        // Initialize npm and create a basic project
+
+        fs.writeFileSync(path.join(projectPath, 'package.json'), JSON.stringify({
+            "name": projectName,
+            "version": "0.0.1",
+            "main": "src/index.js",
+            "scripts": {},
+            "keywords": [],
+            "author": "",
+            "license": "",
+            "description": "",
+            "dependencies": {},
+            "devDependencies": {}
+        }));
+        const projectSrc = path.join(projectPath, 'src')
+        fs.mkdirSync(projectSrc);
+        fs.writeFileSync(path.join(projectSrc, 'index.js'), `exports.handler = async (event) => {
+console.log(event);
+return 'Hello from test!';
+};
+`);
+        const result = await new Promise((resolve, rejects) => {
+            exec(`cd ${projectName} && npm i`, (err, stdout, stderr) => {
+                if (err) {
+                    rejects(err);
+                }
+                resolve(stdout);
+            });
+        });
+        console.log(`Project created: ${projectName}`);
+        console.log(`To run the project, go to ${projectName} and run 'node index.js'`);
+        rem.stop().succeed('created project');
+
+    } catch (e: any) {
+        console.error(e.message)
+        rem.stop().fail(e.message);
+    }
+
+};
 
 export const deploy = async () => {
     const dep = ora('Start build and deploy!').start();
@@ -59,7 +104,7 @@ export const remove = async () => {
         if (log_data.function.length === 0 && log_data.policy.length === 0 && isEmpty(log_data.role)) {
             rem.stop().warn('Does not exist any function!');
         } else {
-            log_data.function.map(async (fun) => {
+            log_data.function.map(async (fun: any) => {
                 await remove_permission(fun.FunctionName);
                 await delete_function(fun.FunctionName);
             })
@@ -70,7 +115,7 @@ export const remove = async () => {
                 const response = await delete_policy(log_data.policy[i].Arn);
                 if (response?.$metadata.httpStatusCode === 200) {
                     delete logdata.data.policy[i];
-                    logdata.data.policy = logdata.data.policy.filter((value) => (value.Arn != log_data.policy[i].Arn));
+                    logdata.data.policy = logdata.data.policy.filter((value: any) => (value.Arn != log_data.policy[i].Arn));
                     logdata.write();
                 };
             }

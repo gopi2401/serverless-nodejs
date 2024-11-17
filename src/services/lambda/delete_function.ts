@@ -7,7 +7,7 @@ export const delete_function = async (funcName: string) => {
         const command = new DeleteFunctionCommand({ FunctionName: funcName });
         const response = await lambda_client.send(command);
         if (response?.$metadata.httpStatusCode === 204) {
-            logdata.data.function = logdata.data.function.filter((value) => (value.FunctionName != funcName));
+            logdata.data.function = logdata.data.function.filter((value: any) => (value.FunctionName != funcName));
             logdata.write();
         };
         return response
