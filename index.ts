@@ -5,6 +5,7 @@ import * as path from 'path';
 import { create, deploy, remove } from './src/main.js';
 // import { core_data } from './src/services/coredata/core_file.js';
 import ora from 'ora';
+import { help } from './src/help.js';
 
 (async () => {
     try {
@@ -39,11 +40,17 @@ import ora from 'ora';
                     });
             } else if (arg === 'remove') {
                 await remove();
+            } else if (arg === '--help' || arg === 'help') {
+                help()
             }
         // } else {
         // spinner.stop().fail("JSON file not found!.");
         // stopDotsLoading(loading, "Sample json file created!.")
         // }
+        if (arg === '--version' || arg === 'version' || arg === '-v') {
+            // Display the version of the CLI tool
+            console.log("Serverless JS CLI Version 1.0.0");
+        }
     } catch (e) {
         console.error(e)
     }
