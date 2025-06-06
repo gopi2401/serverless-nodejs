@@ -33,8 +33,6 @@ This project streamlines serverless architecture management, making it easier fo
 - 🔐 **Dynamic IAM Policy Management**: Simplify the creation and management of IAM roles and policies for enhanced security.
 - 📦 **Build and Packaging Automation**: Automate the bundling of JavaScript files, speeding up your deployment process.
 
-
-
 ---
 
 ## Installation
@@ -66,7 +64,7 @@ This project streamlines serverless architecture management, making it easier fo
    Build your application:
 
    ```bash
-   npm run build
+   sl-nodejs build
    ```
 
 4. Deploy it to AWS Lambda:
@@ -101,7 +99,7 @@ This project streamlines serverless architecture management, making it easier fo
 4. Test the CLI commands:
 
    ```bash
-   npm run test
+   npm i -g
    ```
 ## Command Description
 
