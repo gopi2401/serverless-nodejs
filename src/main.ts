@@ -34,6 +34,30 @@ export const create = async (projectName: string, projectPath: any) => {
             "dependencies": {},
             "devDependencies": {}
         }));
+        fs.writeFileSync(path.join(projectPath, 'servdata.json'), JSON.stringify({
+            "project": projectName,
+            "stage": "",
+            "provider": {
+                "architectures": "arm64",
+                "runtime": "nodejs18.x"
+            },
+            "awsConfig": {
+                "region": "REGION",
+                "credentials": {
+                    "accessKeyId": "your_access_Key_id",
+                    "secretAccessKey": "your_secret_access_key"
+                }
+            },
+            "functionPath": "./src",
+            "function": [
+                {
+                    "name": "test",
+                    "handler": "index.handler",
+                    "source": "index.js"
+                }
+            ]
+        }
+        ));
         const projectSrc = path.join(projectPath, 'src')
         fs.mkdirSync(projectSrc);
         fs.writeFileSync(path.join(projectSrc, 'index.js'), `exports.handler = async (event) => {
@@ -42,7 +66,7 @@ return 'Hello from test!';
 };
 `);
         const result = await new Promise((resolve, rejects) => {
-            exec(`cd ${projectName} && npm i`, (err, stdout, stderr) => {
+            exec(`cd ${projectName} && npm i && npx prettier . --write`, (err, stdout, stderr) => {
                 if (err) {
                     rejects(err);
                 }
