@@ -48,15 +48,14 @@ This project streamlines serverless architecture management, making it easier fo
 1. Create a New Project
 
    ```bash
-   mkdir my-serverless-app
-   cd my-serverless-app
+   sl-nodejs create new
    ```
 2. Initialize the Project
 
    Use your package to set up a new project:
 
    ```bash
-   sl-nodejs create new
+   sl-nodejs init
    ```
 
 3. Build and Deploy

@@ -9,7 +9,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "start": "node dist/index.js",
-    "build": "npx tsc",
+    "build": "rollup -c",
     "test": "npm run build && npm i -g .",
     "test:deploy": "npm run build && npm i -g . && cd example && sl-nodejs deploy",
     "test:remove": "npm run build && npm i -g . && cd example && sl-nodejs remove"
@@ -51,10 +51,15 @@
     "ora": "^8.1.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@sindresorhus/tsconfig": "^6.0.0",
     "@types/cli-table": "^0.3.4",
     "@types/node": "^20.6.0",
-    "esbuild": "^0.19.0",
-    "typescript": "^5.6.3"
+    "esbuild": "^0.25.5",
+    "rollup": "^4.42.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.8.3"
   }
 }
